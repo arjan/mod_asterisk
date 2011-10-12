@@ -35,7 +35,6 @@
 -record(state, {context}).
 
 start_link(Args) when is_list(Args) ->
-    ?DEBUG("DOOO"),
     gen_server:start_link(?MODULE, Args, []).
 
 
@@ -53,6 +52,9 @@ init(Args) ->
 
     case application:start(eastrisk) of
         ok ->
+            ?DEBUG(11),
+            agi_events:add_agi_handler(z_agi_handler, Context),
+            ast_manager_events:add_manager_handler(z_ast_manager_handler, Context),
             {ok, #state{context=Context}};
         {error, _Reason} ->
             z_session_manager:broadcast(#broadcast{type="error", message="Asterisk running in different context!", title="Asterisk", stay=true}, z_acl:sudo(Context)),
@@ -72,7 +74,5 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 terminate(_Reason, _State) ->
-    ?DEBUG(1111111111),
-    ?DEBUG("bye"),
     ok = application:stop(eastrisk).
 
