@@ -36,9 +36,10 @@ module was in place to actually do something with the call. To
 actually handle calls, you need to write your own module which
 observes the `#asterisk_incoming{}` event:
 
-    include_lib("modules/mod_asterisk/include/z_asterisk.hrl").
+    -include_lib("modules/mod_asterisk/include/z_asterisk.hrl").
+    -export([observe_asterisk_incoming/2]).
     
-    observe_asterisk_incoming(#asterisk_incoming{agi_channel=Ch, environment=E}, Context) ->
+    observe_asterisk_incoming(#asterisk_incoming{channel_pid=Ch, environment=_E}, _Context) ->
         agi:answer(Ch),
         agi:say_digits(Ch, "12345", []),
         agi:hangup(Ch),
