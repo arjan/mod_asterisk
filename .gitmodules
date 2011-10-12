@@ -1,0 +1,3 @@
+[submodule "deps/eastrisk"]
+	path = deps/eastrisk
+	url = git://github.com/arjan/eastrisk.git
