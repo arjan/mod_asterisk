@@ -39,9 +39,10 @@ start_link(Args) when is_list(Args) ->
 
 
 init(Args) ->
+    process_flag(trap_exit, true),
+
     {context, Context} = proplists:lookup(context, Args),
 
-    ?DEBUG("Starting asterisk module"),
     application:load(eastrisk),
     application:set_env(eastrisk, mgr_host, z_convert:to_list(m_config:get_value(?MODULE, mgr_host, "localhost", Context))),
     application:set_env(eastrisk, mgr_port, z_convert:to_integer(m_config:get_value(?MODULE, mgr_port, "5038", Context))),
@@ -52,7 +53,6 @@ init(Args) ->
 
     case application:start(eastrisk) of
         ok ->
-            ?DEBUG(11),
             agi_events:add_agi_handler(z_agi_handler, Context),
             ast_manager_events:add_manager_handler(z_ast_manager_handler, Context),
             {ok, #state{context=Context}};
