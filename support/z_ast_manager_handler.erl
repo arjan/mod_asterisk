@@ -36,7 +36,7 @@
 -include("../include/z_asterisk.hrl").
 
 %%% gen_event callbacks
-init(_) -> {ok, nil}.
+init(Context) -> {ok, Context}.
 
 %% @doc Just passes the gen_event notification in to zotonic' notifier system.
 handle_event(Event, Context) ->
